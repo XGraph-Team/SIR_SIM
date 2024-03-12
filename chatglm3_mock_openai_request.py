@@ -9,19 +9,19 @@ model = "chatglm3-6b-32k"
 
 def create_chat_completion(model, messages, functions, use_stream=False):
     data = {
-        "functions": functions,  # 函数定义
-        "model": model,  # 模型名称
-        "messages": messages,  # 会话历史
-        "stream": use_stream,  # 是否流式响应
-        "max_tokens": 32000,  # 最多生成字数
-        "temperature": 0.8,  # 温度
-        "top_p": 0.8,  # 采样概率
+        "functions": functions,  
+        "model": model,  
+        "messages": messages, 
+        "stream": use_stream, 
+        "max_tokens": 32000,  
+        "temperature": 0.8,  
+        "top_p": 0.8, 
     }
 
     response = requests.post(f"{base_url}/v1/chat/completions", json=data, stream=use_stream)
     if response.status_code == 200:
         if use_stream:
-            # 处理流式响应
+          
             for line in response.iter_lines():
                 if line:
                     decoded_line = line.decode('utf-8')[6:]
@@ -34,7 +34,7 @@ def create_chat_completion(model, messages, functions, use_stream=False):
                         print("OK:", response.status_code)
                         print("Special Token:", decoded_line)
         else:
-            # 处理非流式响应
+           
             decoded_line = response.json()
             content = decoded_line.get("choices", [{}])[0].get("message", "").get("content", "")
             print("OK:", response.status_code)
